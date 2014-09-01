@@ -1,5 +1,8 @@
 'use strict';
 
+var bitcore = require('bitcore');
+var Address = bitcore.Address;
+
 exports.render = function (req, res) {
   var addr = req.params.address;
   if (!(new Address(addr)).isValid()){

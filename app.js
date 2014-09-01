@@ -1,20 +1,15 @@
 var express = require('express');
 var stylus = require('stylus');
-var bitcore = require('bitcore');
 var mysql = require('mysql');
 
 var app = express();
 
 var config = require('./config.json');
 
+var bitcore = require('bitcore');
 var Address = bitcore.Address;
 var RpcClient = bitcore.RpcClient;
-
 var rpc = new RpcClient(config.rpc);
-
-rpc.getBlock('000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f', function(err, ret){
-  err ? console.error(err) : console.log("Connected to Bitcoin RPC server.");
-});
 
 var mysqlConnection;
 
