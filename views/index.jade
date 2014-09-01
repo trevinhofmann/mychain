@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  .container.very-spaced
+    h1(class="text-center")
+      | My
+      span.holo Chain
+    form(role="search", action="http://mychain.io/search")
+      .form-group
+        input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q", autofocus)
+    if (locals.error)
+      .alert.alert-danger
+        | #{locals.error}

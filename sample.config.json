@@ -1,0 +1,15 @@
+{
+  "port": 80,
+  "rpc": {
+    "protocol": "http",
+    "user": "DoNotUseThisUsername",
+    "pass": "DoNotUseThisPassword",
+    "host": "localhost",
+    "port": "8332"
+  },
+  "mysql": {
+    "host": "localhost",
+    "user": "DoNotUseThisUsername",
+    "password": "DoNotUseThisPassword"
+  }
+}

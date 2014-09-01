@@ -1,0 +1,22 @@
+{
+  "name" : "mychain",
+  "version" : "0.0.1",
+  "private" : "true",
+  "homepage" : "https://github.com/thofmann/mychain",
+  "bugs" : {
+    "url" : "https://github.com/thofmann/mychain/issues",
+    "email" : "trevinhofmann@gmail.com"
+  },
+  "author" : {
+    "name" : "Trevin Hofmann",
+    "email" : "trevinhofmann@gmail.com"
+  },
+  "dependencies" : {
+    "express" : "*",
+    "jade" : "*",
+    "stylus" : "*",
+    "bitcore" : "*",
+    "mysql" : "*"
+  },
+  "main" : "app.js"
+}
