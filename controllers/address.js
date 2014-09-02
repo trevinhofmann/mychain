@@ -11,15 +11,11 @@ exports.render = function (req, res) {
   }
   var address = {
     address: addr,
-    unspentCount: 0,
-    unspentTotal: 0,
-    spentCount: 0,
-    spentTotal: 0,
-    unspentUnconfirmedCount: 0,
-    unspentUnconfirmedTotal: 0,
-    spentUnconfirmedCount: 0,
-    spentUnconfirmedTotal: 0,
-    outputs: []
+    confirmedReceived: 0,
+    unonfirmedReceived: 0,
+    confirmedPossiblyReceived: 0,
+    unconfirmedPossiblyReceived: 0,
+    transactions: []
   };
   res.render('address', {address: address});
 };

@@ -17,71 +17,39 @@ block content
           th(colspan=2) Calculated output summary
       tbody
         tr
-          td Unspent output count:
+          td Received:
           td
-            | #{address.unspentCount}
-            if address.unspentUnconfirmedCount > 0
-              |  (#{address.unspentUnconfirmedCount} unconfirmed)
-        tr
-          td Unspent output amount:
-          td
-            | #{address.unspentTotal}
-            if address.unspentUnconfirmedTotal > 0
-              |  (#{address.unspentUnconfirmedTotal} unconfirmed)
+            | #{address.confirmedReceived}
+            if address.unconfirmedReceived > 0
+              |  (#{address.unconfirmedReceived} unconfirmed) BTC
             |  BTC
         tr
-          td Spent output count:
+          td Possibly received:
           td
-            | #{address.spentCount}
-            if address.spentUnconfirmedCount > 0
-              |  (#{address.spentUnconfirmedCount} unconfirmed)
-        tr
-          td Spent output amount:
-          td
-            | #{address.spentTotal}
-            if address.spentUnconfirmedTotal > 0
-              |  (#{address.spentUnconfirmedTotal} unconfirmed)
+            | #{address.confirmedPossiblyReceived}
+            if address.unconfirmedPossiblyReceived > 0
+              |  (#{address.unconfirmedPossiblyReceived} unconfirmed)
             |  BTC
     table.table.table-striped.spaced
       thead
         tr
-          th(colspan=3) Outputs
+          th(colspan=3) Transactions
       tbody
-        if address.outputs.length == 0
+        if address.transactions.length == 0
           tr
-            td No corresponding outputs were found.
+            td No corresponding transactions were found.
             td
             td
-        each output, i in address.outputs
+        each tx, i in address.transactions
           tr
             td #{i}
-            td Value:
-            td #{output.value} BTC
-          tr
-            td
-            td ScriptPubKey:
-            td #{output.scriptPubKey.asm}
-          tr
-            td
             td Txid:
-            td: a(href='http://mychain.io/tx/'+output.txid) #{output.txid}
+            td #{tx.txid} BTC
           tr
             td
-            td Tx output index:
-            td #{output.vout}
+            td Value received:
+            td #{tx.valueReceived}
           tr
             td
             td Confirmations:
-            td #{output.confirmations}
-          tr
-            td
-            td Spent:
-            if output.isSpent
-              td True
-            else
-              td False
-          if output.isSpent
-            tr
-              td
-              td Claimed in txid:
-              td #{output.claimedTxid}
+            td: #{tx.confirmations}
