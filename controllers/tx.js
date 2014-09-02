@@ -16,7 +16,6 @@ exports.render = function (req, res) {
     var tx = ret.result;
     tx.confirmations = tx.confirmations || 0;
     tx.isCoinbase = (typeof (tx["vin"][0]["coinbase"]) != 'undefined');
-    console.log(tx["vin"][0]["coinbase"]);
     res.render('tx', {tx: tx});
   });
 };
