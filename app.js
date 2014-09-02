@@ -6,11 +6,6 @@ var app = express();
 
 var config = require('./config.json');
 
-var bitcore = require('bitcore');
-var Address = bitcore.Address;
-var RpcClient = bitcore.RpcClient;
-var rpc = new RpcClient(config.rpc);
-
 var mysqlConnection;
 
 function connectToDatabase(){
