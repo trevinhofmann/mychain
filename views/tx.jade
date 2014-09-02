@@ -93,8 +93,3 @@ block content
             td
             td ScriptPubKey:
             td #{output.scriptPubKey.asm}
-          if output.scriptPubKey.addresses.length = 1
-            tr
-              td
-              td Address:
-              td: a(href='http://mychain.io/address/'+output.scriptPubKey.addresses[0]) #{output.scriptPubKey.addresses[0]}
