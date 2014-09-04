@@ -84,9 +84,9 @@ block content
         tr
           th#outputs(colspan=3) Outputs
       tbody
-        each output, i in tx.vout
+        each output in tx.vout
           tr
-            td #{i}
+            td: a(href='http://mychain.io/tx/'+tx.txid+'/output/'+output.n) #{output.n}
             td Value:
             td #{output.value} BTC
           tr
