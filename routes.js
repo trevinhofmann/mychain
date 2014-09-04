@@ -7,11 +7,13 @@ module.exports = function(app){
   var address = require('./controllers/address');
   var tx = require('./controllers/tx');
   var block = require('./controllers/block');
+  var output = require('./controllers/output');
 
   app.get('/', index.render);
   app.get('/search', search.render);
   app.get('/address/:address', address.render);
   app.get('/tx/:txid', tx.render);
   app.get('/block/:blockhash', block.render);
+  app.get('/tx/:txid/output/:outputid', output.render);
   
 };
