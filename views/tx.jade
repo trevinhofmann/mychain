@@ -69,7 +69,7 @@ block content
             tr
               td
               td Tx output index:
-              td #{input.vout}
+              td: a(href='http://mychain.io/tx/'+input.txid+'/output/'+input.vout) #{input.vout}
             tr
               td
               td ScriptSig:
