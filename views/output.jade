@@ -34,13 +34,16 @@ block content
           th(colspan=2) Other Information
       tbody
         tr
+          td Found in transaction:
+          td: a(href='http://mychain.io/tx/'+tx.txid) #{tx.txid}
+        tr
           td Redeemed for input:
           if (output.redeemed)
             td: a(href='http://mychain.io/tx/'+tx.txid+'/input/'+output.redeemed.vout)
           else
             td Not yet redeemed
         tr
-          td ScriptPubKey type
+          td ScriptPubKey type:
           td #{output.scriptPubKey.type}
     table.table.table-striped.spaced
       thead
