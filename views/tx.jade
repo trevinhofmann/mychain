@@ -63,7 +63,7 @@ block content
         each input, i in tx.vin
           if !tx.isCoinbase
             tr
-              td #{i}
+              td: a(href='http://mychain.io/tx/'+input.txid+'/input/'+i) #{i}
               td Txid:
               td: a(href='http://mychain.io/tx/'+input.txid) #{input.txid}
             tr
