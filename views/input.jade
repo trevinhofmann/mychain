@@ -17,5 +17,17 @@ block content
           th(colspan=2) Raw Data
       tbody
         tr
-          td
-          td
+          td Redeemed txid:
+          td #{input.txid}
+        tr
+          td Redeemed output index:
+          td #{input.vout}
+        tr
+          td ScriptSig
+          td #{input.scriptSig.asm}
+        tr
+          td ScriptSig hex
+          td #{input.scriptSig.hex}
+        tr
+          td Sequence
+          td #{input.sequence}
