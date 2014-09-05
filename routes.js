@@ -8,6 +8,7 @@ module.exports = function(app){
   var tx = require('./controllers/tx');
   var block = require('./controllers/block');
   var output = require('./controllers/output');
+  var input = require('./controllers/input');
 
   app.get('/', index.render);
   app.get('/search', search.render);
@@ -15,5 +16,6 @@ module.exports = function(app){
   app.get('/tx/:txid', tx.render);
   app.get('/block/:blockhash', block.render);
   app.get('/tx/:txid/output/:outputid', output.render);
+  app.get('/tx/:txid/input/:inputid', input.render);
   
 };

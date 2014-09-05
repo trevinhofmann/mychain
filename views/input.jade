@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .container.very-spaced
+    h1.text-center
+      | My
+      span.holo Chain
+    form(role="search", action="http://mychain.io/search")
+      .form-group
+        input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q" value=tx.txid+'/input/'+input.n)
+    h3.text-center.fairly-spaced
+      | Input: 
+      a(href='http://mychain.io/tx/'+tx.txid+'/input/'+input.n) #{tx.txid}/input/#{input.n}
+    table.table.table-striped.spaced
+      thead
+        tr
+          th(colspan=2) Raw Data
+      tbody
+        tr
+          td
+          td
