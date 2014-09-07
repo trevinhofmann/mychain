@@ -63,12 +63,12 @@ block content
         each input, i in tx.vin
           if !tx.isCoinbase
             tr
-              td: a(href='http://mychain.io/tx/'+input.txid+'/input/'+i) #{i}
-              td Previous tx:
+              td: a(href='http://mychain.io/tx/'+tx.txid+'/input/'+i) #{i}
+              td Redeemed txid:
               td: a(href='http://mychain.io/tx/'+input.txid) #{input.txid}
             tr
               td
-              td Tx output index:
+              td Redeemed output index:
               td: a(href='http://mychain.io/tx/'+input.txid+'/output/'+input.vout) #{input.vout}
             tr
               td
@@ -76,7 +76,7 @@ block content
               td #{input.scriptSig.asm}
           else
             tr
-              td: a(href='http://mychain.io/tx/'+input.txid+'/input/'+i) #{i}
+              td: a(href='http://mychain.io/tx/'+tx.txid+'/input/'+i) #{i}
               td Coinbase:
               td #{input.coinbase}
     table.table.table-striped.spaced
