@@ -23,7 +23,29 @@ exports.render = function (req, res) {
             res.redirect('/block/'+q);
           }
           else{
-            res.render('index', {error: 'Search returned no results: '+q});
+            if (q.indexOf('/input/') > -1 && q.split('/input/').length == 2 && !isNaN(q.split('/input/')[1])){
+              rpc.getRawTransaction(q.split('/input/')[0], 1, function(err, ret){
+                if (!err){
+                  res.redirect('/tx/'+q);
+                }
+                else{
+                  res.render('index', {error: 'Search returned no results: '+q});
+                }
+              });
+            }
+            else if (q.indexOf('/output/') > -1 && q.split('/output/').length == 2 && !isNaN(q.split('/output/')[1])){
+              rpc.getRawTransaction(q.split('/output/')[0], 1, function(err, ret){
+                if (!err){
+                  res.redirect('/tx/'+q);
+                }
+                else{
+                  res.render('index', {error: 'Search returned no results: '+q});
+                }
+              });
+            }
+            else{
+              res.render('index', {error: 'Search returned no results: '+q});
+            }
           }
         });
       }
