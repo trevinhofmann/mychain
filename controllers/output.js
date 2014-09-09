@@ -10,7 +10,7 @@ exports.render = function (req, res) {
   var txid = req.params.txid;
   var outputid = req.params.outputid;
   rpc.getRawTransaction(txid, 1, function(err, ret){
-    if (err){
+    if (err || outputid < 0 || outputid >= ret.result.vout.length){
       res.render('index', {error: 'Output was invalid: '+txid+'/output/'+outputid});
       return;
     }

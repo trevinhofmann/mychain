@@ -10,7 +10,7 @@ exports.render = function (req, res) {
   var txid = req.params.txid;
   var inputid = req.params.inputid;
   rpc.getRawTransaction(txid, 1, function(err, ret){
-    if (err){
+    if (err || inputid < 0 || inputid >= ret.result.vout.length){
       res.render('index', {error: 'Input was invalid: '+txid+'/input/'+inputid});
       return;
     }
