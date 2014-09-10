@@ -18,10 +18,10 @@ function renderResult(req, res){
   var command = req.params.command;
   var params = req.query;
   var response = {};
-  if (command == 'block'){
+  if (command == 'blockhash'){
     if (typeof params.hash == 'undefined'){
       response.status = 'error';
-      response.message = 'Required parameter \'hash\' is missing.';
+      response.message = 'Required parameter \'blockhash\' is missing.';
     }
     else{
       rpc.getBlock(params.hash, function(err, ret){
@@ -34,6 +34,26 @@ function renderResult(req, res){
         var block = ret.result;
         response.status = 'ok';
         response.data = block;
+        res.json(response);
+      });
+    }
+  }
+  else if (command == 'tx'){
+    if (typeof params.txid == 'undefined'){
+      response.status = 'error';
+      response.message = 'Required parameter \'txid\' is missing.';
+    }
+    else{
+      rpc.getRawTransaction(params.txid, 1, function(err, ret){
+        if (err){
+          response.status = 'error';
+          response.message = 'Transaction was not found.';
+          res.json(response);
+          return;
+        }
+        var tx = ret.result;
+        response.status = 'ok';
+        response.data = tx;
         res.json(response);
       });
     }
