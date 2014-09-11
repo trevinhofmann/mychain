@@ -16,18 +16,23 @@ block content
         tr
           th(colspan=2) Raw Data
       tbody
+        if !tx.isCoinbase
+          tr
+            td Redeemed txid:
+            td #{input.txid}
+          tr
+            td Redeemed output index:
+            td #{input.vout}
+          tr
+            td ScriptSig:
+            td #{input.scriptSig.asm}
+          tr
+            td ScriptSig hex:
+            td #{input.scriptSig.hex}
+        else
+          tr
+            td Coinbase:
+            td #{input.coinbase}
         tr
-          td Redeemed txid:
-          td #{input.txid}
-        tr
-          td Redeemed output index:
-          td #{input.vout}
-        tr
-          td ScriptSig
-          td #{input.scriptSig.asm}
-        tr
-          td ScriptSig hex
-          td #{input.scriptSig.hex}
-        tr
-          td Sequence
+          td Sequence:
           td #{input.sequence}

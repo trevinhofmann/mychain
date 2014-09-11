@@ -16,6 +16,7 @@ exports.render = function (req, res) {
     }
     var tx = ret.result;
     tx.confirmations = tx.confirmations || 0;
+    tx.isCoinbase = (typeof (tx["vin"][0]["coinbase"]) != 'undefined');
     var input = tx.vin[inputid];
     input.n = inputid;
     res.render('input', {tx: tx, input: input});
