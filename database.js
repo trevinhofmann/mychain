@@ -16,10 +16,11 @@ var tables = {
     'block_height_checked INT NOT NULL'
   ],
   'outputs': [
-    'scriptPubKey_hash BINARY(32) NOT NULL KEY',
+    'scriptPubKey_hash BINARY(32) NOT NULL',
     'txid BINARY(32) NOT NULL',
     'vout INT NOT NULL',
-    'claims TEXT DEFAULT NULL'
+    'claims TEXT DEFAULT NULL',
+    'INDEX `scriptPubKey_hash` (`scriptPubKey_hash`)'
   ]
 };
 
@@ -55,15 +56,29 @@ function addTransactions(txs){
     var tx = ret.result;
     for (var output in tx.vout){
       var scriptPubKeyHash = crypto.createHash('sha256').update(tx.vout[output].scriptPubKey.hex).digest('hex');
-      connection.query('INSERT INTO outputs (scriptPubKey_hash, txid, vout) VALUES (X\''+scriptPubKeyHash+'\', X\''+tx.txid+'\', '+output+')');
+      connection.query('INSERT INTO outputs (scriptPubKey_hash, txid, vout) VALUES (X\''+scriptPubKeyHash+'\', X\''+tx.txid+'\', '+output+')', function(err, result){
+        if (err){
+          console.log('Database error for command: '+'INSERT INTO outputs (scriptPubKey_hash, txid, vout) VALUES (X\''+scriptPubKeyHash+'\', X\''+tx.txid+'\', '+output+')');
+        }
+      });
     }
     if (typeof (tx["vin"][0]["coinbase"]) == 'undefined'){
       for (var input in tx.vin){
-        connection.query('UPDATE outputs SET claims = concat(claims, \','+tx.txid+'/'+input+'\') WHERE txid=X\''+tx.vin[input].txid+'\' AND vout=X\''+tx.vin[input].vout+'\'');
+        connection.query('UPDATE outputs SET claims = concat(claims, \','+tx.txid+'/'+input+'\') WHERE txid=X\''+tx.vin[input].txid+'\' AND vout='+tx.vin[input].vout, function(err, result){
+        if (err){
+          console.log('Database error for command: '+'UPDATE outputs SET claims = concat(claims, \','+tx.txid+'/'+input+'\') WHERE txid=X\''+tx.vin[input].txid+'\' AND vout='+tx.vin[input].vout);
+        }
+      });
       }
     }
     txs.shift();
-    (txs.length > 0) ? addTransactions(txs) : setTimeout(update, 100);
+    if (txs.length > 0){
+      addTransactions(txs);
+    }
+    else{
+      connection.query('UPDATE vars SET block_height_checked='+heightChecked);
+      update();
+    }
   });
 }
 
@@ -77,11 +92,16 @@ function update(){
     }
     else{
       rpc.getBlockHash(heightChecked+1, function(err, ret){
-        rpc.getBlock(ret.result, function(err, ret){
-          heightChecked ++;
-          console.log('Adding transactions from block height '+heightChecked);
-          addTransactions(ret.result.tx);
-        });
+        if (err){
+          update();
+        }
+        else{
+          rpc.getBlock(ret.result, function(err, ret){
+            heightChecked ++;
+            console.log('Adding transactions from block height '+heightChecked);
+            addTransactions(ret.result.tx);
+          });
+        }
       });
     }
   }
