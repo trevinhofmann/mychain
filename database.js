@@ -54,7 +54,7 @@ function connectToDatabase(){
 function addTransactions(txs){
   rpc.getRawTransaction(txs[0], 1, function(err, ret){
     if (err){
-      addTransactions(txs);
+      setTimeout(addTransactions(txs), 1000);
       return;
     }
     var tx = ret.result;
@@ -97,15 +97,18 @@ function update(){
     else{
       rpc.getBlockHash(heightChecked+1, function(err, ret){
         if (err){
-          update();
+          setTimeout(update(), 1000);
+          return;
         }
-        else{
-          rpc.getBlock(ret.result, function(err, ret){
-            heightChecked ++;
-            console.log('Adding transactions from block height '+heightChecked);
-            addTransactions(ret.result.tx);
-          });
-        }
+        rpc.getBlock(ret.result, function(err, ret){
+          if (err){
+            setTimeout(update(), 1000);
+            return;
+          }
+          heightChecked ++;
+          console.log('Adding transactions from block height '+heightChecked);
+          addTransactions(ret.result.tx);
+        });
       });
     }
   }
