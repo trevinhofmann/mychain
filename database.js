@@ -1,0 +1,107 @@
+'use strict';
+
+var config = require('./config.json');
+
+var mysql = require('mysql');
+var crypto = require('crypto');
+
+var bitcore = require('bitcore');
+var RpcClient = bitcore.RpcClient;
+var rpc = new RpcClient(config.rpc);
+
+var connection;
+
+var tables = {
+  'vars': [
+    'block_height_checked INT NOT NULL'
+  ],
+  'outputs': [
+    'scriptPubKey_hash BINARY(32) NOT NULL KEY',
+    'txid BINARY(32) NOT NULL',
+    'vout INT NOT NULL',
+    'claims TEXT DEFAULT NULL'
+  ]
+};
+
+var heightChecked = -1;
+var chainHeight = 0;
+
+function connectToDatabase(){
+  connection = mysql.createConnection(config.mysql);
+  connection.connect(function(err){
+    console.log(err ? 'Failed to connect to MySQL database.' : 'Connected to MySQL database.');
+    if (!err){
+      connection.query('CREATE DATABASE IF NOT EXISTS mychain');
+      connection.changeUser({database: 'mychain'});
+      for (var table in tables){
+        connection.query('CREATE TABLE IF NOT EXISTS '+table+' ('+tables[table].join(',')+')');
+      }
+      update();
+    }
+  });
+  connection.on('error', function(err){
+    if (err.code === 'PROTOCOL_CONNECTION_LOST'){
+      console.log("Database error. Reconnecting.");
+      connectToDatabase();
+    }
+    else{
+      throw err;
+    }
+  });
+}
+
+function addTransactions(txs){
+  rpc.getRawTransaction(txs[0], 1, function(err, ret){
+    var tx = ret.result;
+    for (var output in tx.vout){
+      var scriptPubKeyHash = crypto.createHash('sha256').update(tx.vout[output].scriptPubKey.hex).digest('hex');
+      connection.query('INSERT INTO outputs (scriptPubKey_hash, txid, vout) VALUES (X\''+scriptPubKeyHash+'\', X\''+tx.txid+'\', '+output+')');
+    }
+    if (typeof (tx["vin"][0]["coinbase"]) == 'undefined'){
+      for (var input in tx.vin){
+        connection.query('UPDATE outputs SET claims = concat(claims, \','+tx.txid+'/'+input+'\') WHERE txid=X\''+tx.vin[input].txid+'\' AND vout=X\''+tx.vin[input].vout+'\'');
+      }
+    }
+    txs.shift();
+    (txs.length > 0) ? addTransactions(txs) : setTimeout(update, 100);
+  });
+}
+
+function update(){
+  if (heightChecked > -1){
+    if (heightChecked >= chainHeight){
+      rpc.getBlockCount(function(err, ret){
+        chainHeight = ret.result - 1;
+        setTimeout(update(), 250);
+      });
+    }
+    else{
+      rpc.getBlockHash(heightChecked+1, function(err, ret){
+        rpc.getBlock(ret.result, function(err, ret){
+          heightChecked ++;
+          console.log('Adding transactions from block height '+heightChecked);
+          addTransactions(ret.result.tx);
+        });
+      });
+    }
+  }
+  else{
+    connection.query('SELECT block_height_checked FROM vars', function(err, rows){
+      if (err) throw err;
+      if (rows.length == 0){
+        connection.query('INSERT INTO vars (block_height_checked) VALUES (0)');
+        heightChecked = 0;
+        update();
+      }
+      else if (rows.length == 1){
+        heightChecked = rows[0]['block_height_checked'];
+        update();
+      }
+      else{
+        console.log('There is a problem with the database \'vars\' table. Multiple rows exist, and there should be only one.');
+      }
+    });
+  }
+}
+
+connectToDatabase();

@@ -1,29 +1,11 @@
 var express = require('express');
 var stylus = require('stylus');
-var mysql = require('mysql');
 
 var app = express();
 
 var config = require('./config.json');
+var database = require('./database');
 
-var mysqlConnection;
-
-function connectToDatabase(){
-  mysqlConnection = mysql.createConnection(config.mysql);
-  mysqlConnection.connect(function(err){
-    err ? console.log("Failed to connect to MySQL database.") : console.log("Connected to MySQL database.");
-  });
-  mysqlConnection.on('error', function(err){
-    if (err.code === 'PROTOCOL_CONNECTION_LOST'){
-      connectToDatabase();
-    }
-    else{
-      throw err;
-    }
-  });
-}
-
-//connectToDatabase(); // database not yet used
 
 app.set('views', __dirname + '/views');
 
