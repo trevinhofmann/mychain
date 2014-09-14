@@ -53,6 +53,10 @@ function connectToDatabase(){
 
 function addTransactions(txs){
   rpc.getRawTransaction(txs[0], 1, function(err, ret){
+    if (err){
+      addTransactions(txs);
+      return;
+    }
     var tx = ret.result;
     for (var output in tx.vout){
       var scriptPubKeyHash = crypto.createHash('sha256').update(tx.vout[output].scriptPubKey.hex).digest('hex');
