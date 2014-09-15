@@ -1,13 +1,6 @@
 'use strict';
 
-var config = require('./config.json');
-
 var mysql = require('mysql');
-var crypto = require('crypto');
-
-var bitcore = require('bitcore');
-var RpcClient = bitcore.RpcClient;
-var rpc = new RpcClient(config.rpc);
 
 var connection;
 
@@ -19,8 +12,9 @@ var tables = {
     'scriptPubKey_hash BINARY(32) NOT NULL',
     'txid BINARY(32) NOT NULL',
     'vout INT NOT NULL',
-    'claims TEXT DEFAULT NULL',
-    'INDEX `scriptPubKey_hash` (`scriptPubKey_hash`)'
+    'claims TEXT DEFAULT \'\'',
+    'INDEX `scriptPubKey_hash` (`scriptPubKey_hash`)',
+    'UNIQUE KEY `output` (`txid`, `vout`)'
   ]
 };
 
@@ -68,11 +62,11 @@ function addTransactions(txs){
     }
     if (typeof (tx["vin"][0]["coinbase"]) == 'undefined'){
       for (var input in tx.vin){
-        connection.query('UPDATE outputs SET claims = concat(claims, \','+tx.txid+'/'+input+'\') WHERE txid=X\''+tx.vin[input].txid+'\' AND vout='+tx.vin[input].vout, function(err, result){
-        if (err){
-          console.log('Database error for command: '+'UPDATE outputs SET claims = concat(claims, \','+tx.txid+'/'+input+'\') WHERE txid=X\''+tx.vin[input].txid+'\' AND vout='+tx.vin[input].vout);
-        }
-      });
+        connection.query('UPDATE outputs SET claims = concat_ws(\'\', claims, \','+tx.txid+'/'+input+'\') WHERE txid=X\''+tx.vin[input].txid+'\' AND vout='+tx.vin[input].vout, function(err, result){
+          if (err){
+            console.log('Database error for command: '+'UPDATE outputs SET claims = concat_ws(\'\', claims, \','+tx.txid+'/'+input+'\') WHERE txid=X\''+tx.vin[input].txid+'\' AND vout='+tx.vin[input].vout);
+          }
+        });
       }
     }
     txs.shift();
@@ -118,17 +112,27 @@ function update(){
       if (rows.length == 0){
         connection.query('INSERT INTO vars (block_height_checked) VALUES (0)');
         heightChecked = 0;
-        update();
+        setTimeout(update, 10);
       }
       else if (rows.length == 1){
         heightChecked = rows[0]['block_height_checked'];
-        update();
+        setTimeout(update, 10);
       }
       else{
         console.log('There is a problem with the database \'vars\' table. Multiple rows exist, and there should be only one.');
       }
     });
   }
+}
+
+exports.get = function(query, callback){
+  connection.query(query, function(err, rows){
+    if (err){
+      console.log('Database error for query: '+query);
+      return;
+    }
+    callback(rows);
+  });
 }
 
 connectToDatabase();

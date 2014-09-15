@@ -1,11 +1,5 @@
 'use strict';
 
-var config = require('../config.json');
-
-var bitcore = require('bitcore');
-var RpcClient = bitcore.RpcClient;
-var rpc = new RpcClient(config.rpc);
-
 exports.render = function (req, res) {
   var txid = req.params.txid;
   var inputid = req.params.inputid;

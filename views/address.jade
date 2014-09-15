@@ -44,12 +44,12 @@ block content
           tr
             td #{i}
             td Txid:
-            td #{tx.txid} BTC
-          tr
-            td
-            td Value received:
-            td #{tx.valueReceived}
-          tr
-            td
-            td Confirmations:
-            td: #{tx.confirmations}
+            td: a(href='http://mychain.io/tx/'+tx.txid.toLowerCase()) #{tx.txid.toLowerCase()}
+          //tr
+          //  td
+          //  td Value received:
+          //  td #{tx.valueReceived}
+          //tr
+          //  td
+          //  td Confirmations:
+          //  td: #{tx.confirmations}
