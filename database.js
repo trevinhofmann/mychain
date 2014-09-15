@@ -26,12 +26,14 @@ function connectToDatabase(){
   connection.connect(function(err){
     console.log(err ? 'Failed to connect to MySQL database.' : 'Connected to MySQL database.');
     if (!err){
-      connection.query('CREATE DATABASE IF NOT EXISTS mychain');
-      connection.changeUser({database: 'mychain'});
-      for (var table in tables){
-        connection.query('CREATE TABLE IF NOT EXISTS '+table+' ('+tables[table].join(',')+')');
-      }
-      update();
+      connection.query('CREATE DATABASE IF NOT EXISTS mychain', function (err, result){
+        connection.query('USE mychain', function (err, result){
+          for (var table in tables){
+            connection.query('CREATE TABLE IF NOT EXISTS '+table+' ('+tables[table].join(',')+')');
+          }
+          setTimeout(update, 2000);
+        });
+      });
     }
   });
   connection.on('error', function(err){
@@ -46,38 +48,59 @@ function connectToDatabase(){
 }
 
 function addTransactions(txs){
-  rpc.getRawTransaction(txs[0], 1, function(err, ret){
-    if (err){
-      setTimeout(addTransactions, 1000, txs);
-      return;
-    }
-    var tx = ret.result;
-    for (var output in tx.vout){
-      var scriptPubKeyHash = crypto.createHash('sha256').update(tx.vout[output].scriptPubKey.hex).digest('hex');
-      connection.query('INSERT INTO outputs (scriptPubKey_hash, txid, vout) VALUES (X\''+scriptPubKeyHash+'\', X\''+tx.txid+'\', '+output+')', function(err, result){
-        if (err){
-          console.log('Database error for command: '+'INSERT INTO outputs (scriptPubKey_hash, txid, vout) VALUES (X\''+scriptPubKeyHash+'\', X\''+tx.txid+'\', '+output+')');
-        }
-      });
-    }
-    if (typeof (tx["vin"][0]["coinbase"]) == 'undefined'){
-      for (var input in tx.vin){
-        connection.query('UPDATE outputs SET claims = concat_ws(\'\', claims, \','+tx.txid+'/'+input+'\') WHERE txid=X\''+tx.vin[input].txid+'\' AND vout='+tx.vin[input].vout, function(err, result){
+  if (txs.length > 0){
+    rpc.getRawTransaction(txs[0], 1, function(err, ret){
+      if (err){
+        return setTimeout(addTransactions, 1000, txs);
+      }
+      var tx = ret.result;
+      var outputsInserted = 0;
+      for (var output in tx.vout){
+        var scriptPubKeyHash = crypto.createHash('sha256').update(tx.vout[output].scriptPubKey.hex).digest('hex');
+        var query = 'INSERT INTO outputs (scriptPubKey_hash, txid, vout) VALUES (X\''+scriptPubKeyHash+'\', X\''+tx.txid+'\', '+output+')';
+        connection.query(query, function(err, result){
           if (err){
-            console.log('Database error for command: '+'UPDATE outputs SET claims = concat_ws(\'\', claims, \','+tx.txid+'/'+input+'\') WHERE txid=X\''+tx.vin[input].txid+'\' AND vout='+tx.vin[input].vout);
+            console.log('Database error: Failed to insert an output.');
+          }
+          outputsInserted ++;
+          if (outputsInserted == tx.vout.length){
+            if (typeof (tx.vin[0]["coinbase"]) == 'undefined'){
+              var inputsInserted = 0;
+              for (var input in tx.vin){
+                var query = 'UPDATE outputs SET claims = concat_ws(\'\', claims, \','+tx.txid+'/'+input+'\') WHERE txid=X\''+tx.vin[input].txid+'\' AND vout='+tx.vin[input].vout;
+                connection.query(query, function(err, result){
+                  if (err){
+                    console.log('Database error: Failed to add input claim to an output.');
+                  }
+                  inputsInserted ++;
+                  if (inputsInserted == tx.vin.length){
+                    txs.shift();
+                    setTimeout(addTransactions, 10, txs);
+                  }
+                });
+              }
+            }
+            else{
+              txs.shift();
+              setTimeout(addTransactions, 10, txs);
+            }
           }
         });
       }
-    }
-    txs.shift();
-    if (txs.length > 0){
-      addTransactions(txs);
-    }
-    else{
-      connection.query('UPDATE vars SET block_height_checked='+heightChecked);
-      update();
-    }
-  });
+    });
+  }
+  else{
+    var query = 'UPDATE vars SET block_height_checked='+heightChecked;
+    connection.query(query, function(err, result){
+      if (err){
+        console.log('Database error: Failed to update block_height_checked.');
+      }
+      setTimeout(update, 20);
+    });
+  }
+}
+
+function addTransaction(tx, txs){
 }
 
 function update(){
@@ -85,19 +108,17 @@ function update(){
     if (heightChecked >= chainHeight){
       rpc.getBlockCount(function(err, ret){
         chainHeight = ret.result - 1;
-        setTimeout(update, 250);
+        return setTimeout(update, 250);
       });
     }
     else{
       rpc.getBlockHash(heightChecked+1, function(err, ret){
         if (err){
-          setTimeout(update, 1000);
-          return;
+          return setTimeout(update, 1000);
         }
         rpc.getBlock(ret.result, function(err, ret){
           if (err){
-            setTimeout(update, 1000);
-            return;
+            return setTimeout(update, 1000);
           }
           heightChecked ++;
           console.log('Adding transactions from block height '+heightChecked);
@@ -110,13 +131,15 @@ function update(){
     connection.query('SELECT block_height_checked FROM vars', function(err, rows){
       if (err) throw err;
       if (rows.length == 0){
-        connection.query('INSERT INTO vars (block_height_checked) VALUES (0)');
-        heightChecked = 0;
-        setTimeout(update, 10);
+        var query = 'INSERT INTO vars (block_height_checked) VALUES (0)';
+        connection.query(query, function(err, result){
+          heightChecked = 0;
+          return setTimeout(update, 10);
+        });
       }
       else if (rows.length == 1){
         heightChecked = rows[0]['block_height_checked'];
-        setTimeout(update, 10);
+        return setTimeout(update, 10);
       }
       else{
         console.log('There is a problem with the database \'vars\' table. Multiple rows exist, and there should be only one.');
