@@ -40,16 +40,12 @@ block content
             td No corresponding transactions were found.
             td
             td
-        each tx, i in address.transactions
+        each tx in address.transactions
           tr
-            td #{i}
-            td Txid:
             td: a(href='http://mychain.io/tx/'+tx.txid.toLowerCase()) #{tx.txid.toLowerCase()}
-          //tr
-          //  td
-          //  td Value received:
-          //  td #{tx.valueReceived}
-          //tr
-          //  td
-          //  td Confirmations:
-          //  td: #{tx.confirmations}
+            td Value paid to address:
+            td #{tx.amount}
+          tr
+            td
+            td Confirmations:
+            td #{tx.confirmations}

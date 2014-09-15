@@ -11,5 +11,6 @@
     "host": "localhost",
     "user": "DoNotUseThisUsername",
     "password": "DoNotUseThisPassword"
-  }
+  },
+  "minConfirmations": 1
 }
