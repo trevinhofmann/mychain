@@ -24,6 +24,8 @@ app.use(stylus.middleware({
   }
 }));
 
+app.use(require('morgan')('dev'));
+
 app.use(express.static(__dirname + '/public'));
 
 app.listen(config.port);
