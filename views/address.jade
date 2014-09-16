@@ -40,9 +40,9 @@ block content
             td No corresponding transactions were found.
             td
             td
-        each tx in address.transactions
+        each tx, txid in address.transactions
           tr
-            td: a(href='http://mychain.io/tx/'+tx.txid.toLowerCase()) #{tx.txid.toLowerCase()}
+            td: a(href='http://mychain.io/tx/'+txid) #{txid.toLowerCase()}
             td Value paid to address:
             td #{tx.amount} BTC
           tr

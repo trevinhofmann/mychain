@@ -39,6 +39,21 @@ exports.render = function (req, res) {
           }
         }
       }
+      for (var key in txs){
+        delete txs[key].vin;
+        delete txs[key].vout;
+        delete txs[key].scriptSig;
+        delete txs[key].hex;
+        delete txs[key].txid;
+        delete txs[key].version;
+        delete txs[key].locktime;
+        delete txs[key].blocktime;
+        delete txs[key].blockhash;
+        delete txs[key].time;
+        delete txs[key].isCoinbase;
+        txs[key.toLowerCase()] = txs[key];
+        delete txs[key];
+      }
       var address = {
         address: addr,
         transactions: txs,
