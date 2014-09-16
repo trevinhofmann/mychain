@@ -20,7 +20,8 @@
     "jade" : "*",
     "stylus" : "*",
     "bitcore" : "*",
-    "mysql" : "*"
+    "mysql" : "*",
+    "crypto" : "*"
   },
   "main" : "app.js"
 }
