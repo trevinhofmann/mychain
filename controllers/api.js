@@ -16,45 +16,122 @@ function renderResult(req, res){
     if (typeof params.hash == 'undefined'){
       response.status = 'error';
       response.message = 'Required parameter \'blockhash\' is missing.';
+      return res.json(response);
     }
-    else{
-      rpc.getBlock(params.hash, function(err, ret){
-        if (err){
-          response.status = 'error';
-          response.message = 'Block was not found.';
-          res.json(response);
-          return;
-        }
-        var block = ret.result;
-        response.status = 'ok';
-        response.data = block;
-        res.json(response);
-      });
-    }
+    rpc.getBlock(params.hash, function(err, ret){
+      if (err){
+        response.status = 'error';
+        response.message = 'Block was not found.';
+        return res.json(response);
+      }
+      var block = ret.result;
+      response.status = 'ok';
+      response.data = block;
+      return res.json(response);
+    });
   }
   else if (command == 'tx'){
     if (typeof params.txid == 'undefined'){
       response.status = 'error';
       response.message = 'Required parameter \'txid\' is missing.';
+      return res.json(response);
     }
-    else{
-      rpc.getRawTransaction(params.txid, 1, function(err, ret){
-        if (err){
-          response.status = 'error';
-          response.message = 'Transaction was not found.';
-          res.json(response);
-          return;
+    rpc.getRawTransaction(params.txid, 1, function(err, ret){
+      if (err){
+        response.status = 'error';
+        response.message = 'Transaction was not found.';
+        return res.json(response);
+      }
+      var tx = ret.result;
+      response.status = 'ok';
+      response.data = tx;
+      return res.json(response);
+    });
+  }
+  else if (command == 'address'){
+    if (typeof params.address == 'undefined'){
+      response.status = 'error';
+      response.message = 'Required parameter \'address\' is missing.';
+      return res.json(response);
+    }
+    var addr = params.address;
+    if (!(new Address(addr)).isValid()){
+      response.status = 'error';
+      response.message = 'Address was invalid.';
+      return res.json(response);
+    }
+    var scriptPubKey = (new Address(addr)).getScriptPubKey()['buffer'].toString('hex');
+    var scriptPubKey_hash = crypto.createHash('sha256').update(scriptPubKey).digest('hex');
+    database.get('SELECT HEX(txid) as txid, vout FROM outputs WHERE scriptPubKey_hash=X\''+scriptPubKey_hash+'\'', function(rows){
+      var outputs = rows;
+      getTransactions(outputs, function(txs){
+        var confirmedReceived = 0;
+        var unconfirmedReceived = 0;
+        var confirmedPossiblyReceived = 0;
+        var unconfirmedPossiblyReceived = 0;
+        for (var tx in txs){
+          tx = txs[tx];
+          if (tx.confirmations > config.minConfirmations){
+            if (tx.amount > Math.max(confirmedReceived, unconfirmedReceived)){
+              confirmedReceived = tx.amount;
+              unconfirmedReceived = 0;
+            }
+            else{
+              confirmedPossiblyReceived += tx.amount;
+            }
+          }
+          else{
+            if (confirmedReceived > 0){
+              unconfirmedPossiblyReceived += tx.amount;
+            }
+            else if (unconfirmedReceived > 0 && tx.amount > unconfirmedReceived){
+              unconfirmedPossiblyReceived = unconfirmedReceived;
+              unconfirmedReceived = tx.amount;
+            }
+            else{
+              unconfirmedReceived = tx.amount;
+            }
+          }
         }
-        var tx = ret.result;
+        var address = {
+          address: addr,
+          confirmedReceived: confirmedReceived,
+          unconfirmedReceived: unconfirmedReceived,
+          confirmedPossiblyReceived: confirmedPossiblyReceived,
+          unconfirmedPossiblyReceived: unconfirmedPossiblyReceived,
+          transactions: txs
+        };
         response.status = 'ok';
-        response.data = tx;
-        res.json(response);
+        response.data = address;
+        return res.json(response);
       });
-    }
+    });
   }
   else{
     response.status = 'error';
-    response.message = 'Command \''+command+'\'was not recognized.'
+    response.message = 'Command \''+command+'\' was not recognized.'
     return res.json(response);
+  }
+}
+
+function getTransactions(outputs, callback){
+  var fetched = 0;
+  var txs = {};
+  for (var output in outputs){
+    rpc.getRawTransaction(outputs[output].txid, 1, function(err, ret){
+      var tx = ret.result;
+      var txid = outputs[output].txid;
+      if (typeof txs[txid] == 'undefined'){
+        tx.confirmations = tx.confirmations || 0;
+        tx.isCoinbase = (typeof (tx["vin"][0]["coinbase"]) != 'undefined');
+        tx.amount = 0;
+        txs[txid] = tx;
+      }
+      txs[txid].amount += tx.vout[outputs[output].vout].value;
+      fetched ++;
+      if (fetched == outputs.length){
+        callback(txs);
+      }
+    });
   }
 }
