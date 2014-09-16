@@ -64,7 +64,7 @@ function renderResult(req, res){
     var scriptPubKey_hash = crypto.createHash('sha256').update(scriptPubKey).digest('hex');
     database.get('SELECT HEX(txid) as txid, vout FROM outputs WHERE scriptPubKey_hash=X\''+scriptPubKey_hash+'\'', function(rows){
       var outputs = rows;
-      getTransactions(outputs, function(txs){
+      getTransactions(outputs, {}, function(txs){
         var confirmedReceived = 0;
         var unconfirmedReceived = 0;
         var confirmedPossiblyReceived = 0;
@@ -129,24 +129,24 @@ function renderResult(req, res){
   }
 }
 
-function getTransactions(outputs, callback){
+function getTransactions(outputs, txs, callback){
   var fetched = 0;
-  var txs = {};
-  for (var output in outputs){
-    rpc.getRawTransaction(outputs[output].txid, 1, function(err, ret){
+  if (outputs.length > 0){
+    rpc.getRawTransaction(outputs[0].txid, 1, function(err, ret){  
       var tx = ret.result;
-      var txid = outputs[output].txid;
+      var txid = outputs[0].txid;
       if (typeof txs[txid] == 'undefined'){
         tx.confirmations = tx.confirmations || 0;
         tx.isCoinbase = (typeof (tx["vin"][0]["coinbase"]) != 'undefined');
         tx.amount = 0;
         txs[txid] = tx;
       }
-      txs[txid].amount += tx.vout[outputs[output].vout].value;
-      fetched ++;
-      if (fetched == outputs.length){
-        callback(txs);
-      }
+      txs[txid].amount += tx.vout[outputs[0].vout].value;
+      outputs.shift();
+      getTransactions(outputs, txs, callback);
     });
+  }
+  else{
+    callback(txs);
   }
 }
