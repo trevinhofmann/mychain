@@ -1,3 +1,6 @@
-MyChain - A Bitcoin block chain explorer
+MyChain
+========
+
+A Bitcoin block chain explorer
 
 http://mychain.io
