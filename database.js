@@ -2,8 +2,10 @@
 
 var mysql = require('mysql');
 
+// Connection to the SQL database
 var connection;
 
+// Table structure of the SQL database.
 var tables = {
   'vars': [
     'block_height_checked INT NOT NULL'
@@ -18,9 +20,14 @@ var tables = {
   ]
 };
 
+// Current height to which the SQL database is synchronized.
 var heightChecked = -1;
+
+// Current height to which the RPC bitcoin daemon is synchronized
 var chainHeight = 0;
 
+// This opens the connection to the SQL database and creates the database/table structure if it's
+// not already present.
 function connectToDatabase(){
   connection = mysql.createConnection(config.mysql);
   connection.connect(function(err){
@@ -47,6 +54,8 @@ function connectToDatabase(){
   });
 }
 
+// This accepts an array of transaction id's, gets their raw transaction data from the RPC, and
+// stores it in the outputs table of the SQL database.
 function addTransactions(txs){
   if (txs.length > 0){
     rpc.getRawTransaction(txs[0], 1, function(err, ret){
@@ -100,9 +109,8 @@ function addTransactions(txs){
   }
 }
 
-function addTransaction(tx, txs){
-}
-
+// This function is run to acquire data about the next block and insert it into the outputs
+// table of the SQL database.
 function update(){
   if (heightChecked > -1){
     if (heightChecked >= chainHeight){
