@@ -1,5 +1,7 @@
 'use strict';
 
+// Process a search query, redirecting to the appropriate page.
+// TODO: Break up this massive function with some help. Try using returns instead of deep nesting.
 exports.render = function (req, res) {
   var q = req.query.q;
   if ((new Address(q)).isValid()){

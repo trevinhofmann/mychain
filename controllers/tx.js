@@ -1,5 +1,6 @@
 'use strict';
 
+// Render transaction information for a given txid.
 exports.render = function (req, res) {
   var txid = req.params.txid;
   rpc.getRawTransaction(txid, 1, function(err, ret){

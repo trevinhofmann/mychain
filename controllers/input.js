@@ -1,5 +1,6 @@
 'use strict';
 
+// Render information for a given input.
 exports.render = function (req, res) {
   var txid = req.params.txid;
   var inputid = req.params.inputid;

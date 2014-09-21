@@ -1,13 +1,19 @@
 'use strict';
 
+// If a command is defined, render API data accordingly. If a command is not defined, display
+// the API index.
 exports.render = function (req, res) {
   (typeof req.params.command == 'undefined') ? renderIndex(req, res) : renderResult(req, res);
 }
 
+// Render an overview of the API. List available API calls, arguments, and how to use it.
+// TODO: All of it
 function renderIndex(req, res){
 
 }
 
+// Render the data result for a given API call.
+// TODO: Break this up with a different function for each call.
 function renderResult(req, res){
   var command = req.params.command;
   var params = req.query;
@@ -129,6 +135,7 @@ function renderResult(req, res){
   }
 }
 
+// Returns detailed information about the transactions containing given outputs.
 function getTransactions(outputs, txs, callback){
   var fetched = 0;
   if (outputs.length > 0){
