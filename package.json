@@ -21,7 +21,6 @@
     "stylus" : "*",
     "bitcore" : "*",
     "mysql" : "*",
-    "crypto" : "*",
     "morgan" : "*"
   },
   "main" : "app.js"
