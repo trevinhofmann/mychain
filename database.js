@@ -28,6 +28,7 @@ var chainHeight = 0;
 
 // This opens the connection to the SQL database and creates the database/table structure if it's
 // not already present.
+// TODO: Try to simplify this. Use helper functions? Use returns instead of deep nesting?
 function connectToDatabase(){
   connection = mysql.createConnection(config.mysql);
   connection.connect(function(err){
@@ -56,6 +57,7 @@ function connectToDatabase(){
 
 // This accepts an array of transaction id's, gets their raw transaction data from the RPC, and
 // stores it in the outputs table of the SQL database.
+// TODO: This is ugly and has way too much nesting. Use helper functions and returns instead.
 function addTransactions(txs){
   if (txs.length > 0){
     rpc.getRawTransaction(txs[0], 1, function(err, ret){
@@ -156,6 +158,7 @@ function update(){
   }
 }
 
+// Process a SELECT query.
 exports.get = function(query, callback){
   connection.query(query, function(err, rows){
     if (err){
@@ -166,4 +169,5 @@ exports.get = function(query, callback){
   });
 }
 
+// Begin the connection.
 connectToDatabase();
