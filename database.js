@@ -166,6 +166,10 @@ function update(){
   }
   if (heightChecked >= chainHeight){
     rpc.getBlockCount(function(err, ret){
+      if (chainHeight = ret.result - 1){
+        setTimeout(update, 100);
+        return;
+      }
       chainHeight = ret.result - 1;
       update();
     });
