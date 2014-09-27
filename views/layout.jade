@@ -9,8 +9,12 @@ html(lang="en")
     link(rel='stylesheet', href='http://mychain.io/styles.css')
     link(rel='shortcut icon', href='http://mychain.io/favicon.ico')
 body
-  a(href='https://github.com/thofmann/mychain', target='_blank')
-    img.fork-me(src='http://mychain.io/img/forkme.png', alt='Fork me on GitHub')
-  p.spaced.text-center.text-danger Application under development. Data accuracy is not guaranteed.
+  p.padded.text-center.text-danger Application under development. Data accuracy is not guaranteed.
   block content
+  div.footer
+    a(href='https://github.com/thofmann/mychain') Source Code
+    |  | 
+    a(href='mailto:trevinhofmann@gmail.com') Contact
+    |  | 
+    a(href='https://www.weusecoins.com') What is Bitcoin?
   script(src='http://mychain.io/lib/jquery/1.11.1/jquery.min.js')
