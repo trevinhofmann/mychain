@@ -66,7 +66,7 @@ function calculateReceived(txs){
   };
   for (var tx in txs){
     tx = txs[tx];
-    if (tx.confirmations > config.minConfirmations){
+    if (tx.confirmations >= config.minConfirmations){
       if (tx.amount > Math.max(received['confirmed'], received['unconfirmed'])){
         received['confirmed'] = tx.amount;
         received['unconfirmed'] = 0;
