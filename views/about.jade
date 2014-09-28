@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  .container.very-spaced
+    h1.text-center
+      | My
+      span.holo Chain
+    form(role="search", action="http://mychain.io/search")
+      .form-group
+        input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q")
+    h3.text-center.fairly-spaced About MyChain
+    p Hello! Thank you for your interest in MyChain.
+    p MyChain is your new favorite tool for exploring the Bitcoin block chain. You can search for a transaction, block, payment address, and other information, and MyChain will display live data from the Bitcoin block chain for that item.
+    p
+      | At the moment, I am the only developer of MyChain. My name is Trevin Hofmann, and I am a software engineer. If you would like to contribute to MyChain, 
+      a(href="https://github.com/thofmann/mychain") the entire project
+      |  is on Github.
+    p Have a great day!
+    p Trevin Hofmann

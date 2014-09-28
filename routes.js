@@ -12,6 +12,7 @@ module.exports = function(app){
   var output = require('./controllers/output');
   var input = require('./controllers/input');
   var api = require('./controllers/api');
+  var about = require('./controllers/about');
 
   app.get('/', index.render);
   app.get('/search', search.render);
@@ -22,5 +23,6 @@ module.exports = function(app){
   app.get('/tx/:txid/input/:inputid', input.render);
   app.get('/api', api.render);
   app.get('/api/:command', api.render);
+  app.get('/about', about.render);
   
 };
