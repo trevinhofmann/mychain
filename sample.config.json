@@ -12,5 +12,9 @@
     "user": "DoNotUseThisUsername",
     "password": "DoNotUseThisPassword"
   },
+  "GoogleAnalytics": {
+    "enabled": false,
+    "TrackingID": "UA-11111111-1"
+  },
   "minConfirmations": 1
 }
