@@ -11,6 +11,7 @@ GLOBAL.Address = bitcore.Address;
 GLOBAL.RpcClient = bitcore.RpcClient;
 GLOBAL.rpc = new RpcClient(config.rpc);
 GLOBAL.crypto = require('crypto');
+GLOBAL.AddressTools = require('./lib/AddressTools');
 
 // Use 'views' as the directory for HTML views.
 app.set('views', __dirname + '/views');
