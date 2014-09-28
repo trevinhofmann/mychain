@@ -5,13 +5,13 @@ var stylus = require('stylus');
 var app = express();
 
 GLOBAL.config = require('./config.json');
-GLOBAL.database = require('./database');
 GLOBAL.bitcore = require('bitcore');
 GLOBAL.Address = bitcore.Address;
 GLOBAL.RpcClient = bitcore.RpcClient;
 GLOBAL.rpc = new RpcClient(config.rpc);
 GLOBAL.crypto = require('crypto');
 GLOBAL.AddressTools = require('./lib/AddressTools');
+GLOBAL.database = require('./lib/Database');
 
 // Use 'views' as the directory for HTML views.
 app.set('views', __dirname + '/views');
