@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  .container.very-spaced
+    h1.text-center
+      | My
+      span.holo Chain
+    form(role="search", action="http://mychain.io/search")
+      .form-group
+        input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q")
+    h3.text-center.fairly-spaced Donate or Sponsor
+    p Hello!
+    p
+      | Operating a website costs money. If you would be kind enough to donate to the development of MyChain, please use Tip4Commit to donate for each commit made to the Github repository. The link to donate on Tip4Commit can be found here: 
+      a(href="https://tip4commit.com/github/thofmann/mychain") https://tip4commit.com/github/thofmann/mychain
+      | .
+    p
+      | If you are interested in sponsoring MyChain, please contact me at 
+      a(href="mailto:trevinhofmann@gmail.com") trevinhofmann@gmail.com
+      |  for more information.
+    p Thank you!
+    p Trevin Hofmann
