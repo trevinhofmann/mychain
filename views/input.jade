@@ -19,7 +19,8 @@ block content
         if !tx.isCoinbase
           tr
             td Redeemed txid:
-            td #{input.txid}
+            td
+              a(href='http://mychain.io/tx/'+input.txid) #{input.txid}
           tr
             td Redeemed output index:
             td #{input.vout}
