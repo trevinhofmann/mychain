@@ -12,7 +12,10 @@ exports.render = function (req, res) {
     var tx = ret.result;
     tx.confirmations = tx.confirmations || 0;
     var output = tx.vout[outputid];
-    var relatedOutputs = [];
-    res.render('output', {tx: tx, output: output, relatedOutputs: relatedOutputs});
+    TransactionTools.getRelatedOutputs(tx, outputid, function(relatedOutputs){
+      TransactionTools.getRedeemInputs(tx, outputid, function(redeemInputs){
+        res.render('output', {tx: tx, output: output, relatedOutputs: relatedOutputs, redeemInputs: redeemInputs});
+      });
+    });
   });
 };

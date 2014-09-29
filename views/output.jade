@@ -38,8 +38,11 @@ block content
           td: a(href='http://mychain.io/tx/'+tx.txid) #{tx.txid}
         tr
           td Redeemed for input:
-          if (output.redeemed)
-            td: a(href='http://mychain.io/tx/'+tx.txid+'/input/'+output.redeemed.vout)
+          if (redeemInputs.length > 0)
+            td
+              each input in redeemInputs
+                a(href='http://mychain.io/tx/'+input.txid+'/input/'+input.inputid) #{input.txid}/input/#{input.inputid}
+                br
           else
             td Not yet redeemed
         tr
@@ -53,7 +56,7 @@ block content
         if (relatedOutputs.length > 0)
           each output in relatedOutputs
             tr
-              td: a(href='http://mychain.io/tx/'+output.txid+'/output/'+output.n) #{output.txid}/output/#{output.n}
+              td: a(href='http://mychain.io/tx/'+output.txid+'/output/'+output.vout) #{output.txid}/output/#{output.vout}
         else
           tr
             td No outputs were found.
