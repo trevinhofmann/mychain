@@ -3,7 +3,7 @@
 // If a command is defined, render API data accordingly. If a command is not defined, display
 // the API index.
 exports.render = function (req, res) {
-  console.log('Rendering: API');
+  console.log('Rendering: API, requesting IP: '+req.connection.remoteAddress);
   (typeof req.params.command == 'undefined') ? renderIndex(req, res) : renderResult(req, res);
 }
 

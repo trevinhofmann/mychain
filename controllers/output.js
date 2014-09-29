@@ -2,7 +2,7 @@
 
 // Render information for a given output.
 exports.render = function (req, res) {
-  console.log('Rendering: Output');
+  console.log('Rendering: Output, requesting IP: '+req.connection.remoteAddress);
   var txid = req.params.txid;
   var outputid = req.params.outputid;
   rpc.getRawTransaction(txid, 1, function(err, ret){
