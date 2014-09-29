@@ -2,6 +2,7 @@
 
 // Render a block page for a given blockhash.
 exports.render = function (req, res) {
+  console.log('Rendering: Block');
   var blockhash = req.params.blockhash;
   rpc.getBlock(blockhash, function(err, ret){
     if (err){

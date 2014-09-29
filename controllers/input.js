@@ -2,6 +2,7 @@
 
 // Render information for a given input.
 exports.render = function (req, res) {
+  console.log('Rendering: Input');
   var txid = req.params.txid;
   var inputid = req.params.inputid;
   rpc.getRawTransaction(txid, 1, function(err, ret){

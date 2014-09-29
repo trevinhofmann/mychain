@@ -2,6 +2,7 @@
 
 // Process a search query, redirecting to the appropriate page.
 exports.render = function (req, res) {
+  console.log('Rendering: Search');
   var q = req.query.q;
   searchAddress(q, res);
 };
