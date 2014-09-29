@@ -11,6 +11,9 @@ exports.render = function (req, res) {
     var tx = ret.result;
     tx.confirmations = tx.confirmations || 0;
     tx.isCoinbase = (typeof (tx["vin"][0]["coinbase"]) != 'undefined');
-    res.render('tx', {tx: tx});
+    TransactionTools.calculateFee(tx, function(fee){
+      tx.fee = fee;
+      res.render('tx', {tx: tx});
+    });
   });
 };

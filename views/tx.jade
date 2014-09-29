@@ -42,6 +42,9 @@ block content
         tr
           td Blocks confirmed:
           td #{tx.confirmations}
+        tr
+          td Fee paid:
+          td #{tx.fee}
         if tx.confirmations != 0
           tr
             td Contained in block:
