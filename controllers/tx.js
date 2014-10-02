@@ -2,7 +2,6 @@
 
 // Render transaction information for a given txid.
 exports.render = function (req, res) {
-  console.log('Rendering: Tx, requesting IP: '+req.connection.remoteAddress);
   var txid = req.params.txid;
   rpc.getRawTransaction(txid, 1, function(err, ret){
     if (err){

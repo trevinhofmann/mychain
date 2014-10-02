@@ -2,7 +2,6 @@
 
 // Process a search query, redirecting to the appropriate page.
 exports.render = function (req, res) {
-  console.log('Rendering: Search, requesting IP: '+req.connection.remoteAddress);
   var q = req.query.q;
   searchAddress(q, res);
 };
