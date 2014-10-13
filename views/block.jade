@@ -1,58 +1,54 @@
 extends layout
 
 block content
-  .container.very-padded
-    h1.text-center
-      | My
-      span.holo Chain
-    form(role="search", action="http://mychain.io/search")
-      .form-group
-        input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q" value=block.hash)
-    h3.text-center.fairly-spaced
-      | Block: 
-      a(href='http://mychain.io/block/'+block.hash) #{block.hash}
-    table.table.table-striped.spaced
-      thead
-        tr
-          th(colspan=2) Block Header
-      tbody
-        tr
-          td Version:
-          td #{block.version}
-        tr
-          td Previous block hash:
-          td: a(href='http://mychain.io/block/'+block.previousblockhash) #{block.previousblockhash}
-        tr
-          td Merkle root hash:
-          td #{block.merkleroot}
-        tr
-          td Time:
-          td #{block.time}
-        tr
-          td Bits:
-          td #{block.bits}
-        tr
-          td Nonce:
-          td #{block.nonce}
-    table.table.table-striped.spaced
+  form(role="search", action="http://mychain.io/search")
+    .form-group
+      input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q" value=block.hash)
+  h3.text-center.fairly-spaced
+    | Block: 
+    a(href='http://mychain.io/block/'+block.hash) #{block.hash}
+  table.table.table-striped.spaced
+    thead
       tr
-        th(colspan=2) More Information
+        th(colspan=2) Block Header
+    tbody
       tr
-        td Difficulty:
-        td #{block.difficulty}
+        td Version:
+        td #{block.version}
       tr
-        td Height:
-        td #{block.height}
-      if block.nextblockhash
-        tr
-          td Next block:
-          td: a(href='http://mychain.io/block/'+block.nextblockhash) #{block.nextblockhash}
+        td Previous block hash:
+        td: a(href='http://mychain.io/block/'+block.previousblockhash) #{block.previousblockhash}
       tr
-        td Number of transactions:
-        td #{block.tx.length}
-    table.table.table-striped.spaced
+        td Merkle root hash:
+        td #{block.merkleroot}
       tr
-        th Transactions
-      each tx in block.tx
-        tr
-          td: a(href='http://mychain.io/tx/'+tx) #{tx}
+        td Time:
+        td #{block.time}
+      tr
+        td Bits:
+        td #{block.bits}
+      tr
+        td Nonce:
+        td #{block.nonce}
+  table.table.table-striped.spaced
+    tr
+      th(colspan=2) More Information
+    tr
+      td Difficulty:
+      td #{block.difficulty}
+    tr
+      td Height:
+      td #{block.height}
+    if block.nextblockhash
+      tr
+        td Next block:
+        td: a(href='http://mychain.io/block/'+block.nextblockhash) #{block.nextblockhash}
+    tr
+      td Number of transactions:
+      td #{block.tx.length}
+  table.table.table-striped.spaced
+    tr
+      th Transactions
+    each tx in block.tx
+      tr
+        td: a(href='http://mychain.io/tx/'+tx) #{tx}

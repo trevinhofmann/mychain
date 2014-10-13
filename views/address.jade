@@ -1,51 +1,47 @@
 extends layout
 
 block content
-  .container.very-padded
-    h1.text-center
-      | My
-      span.holo Chain
-    form(role="search", action="http://mychain.io/search")
-      .form-group
-        input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q" value=address.address)
-    h3.text-center.fairly-spaced
-      | Address: 
-      a(href='http://mychain.io/address/'+address.address) #{address.address}
-    table.table.table-striped.spaced
-      thead
+  form(role="search", action="http://mychain.io/search")
+    .form-group
+      input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q" value=address.address)
+  h3.text-center.fairly-spaced
+    | Address: 
+    a(href='http://mychain.io/address/'+address.address) #{address.address}
+  table.table.table-striped.spaced
+    thead
+      tr
+        th(colspan=2) Calculated Receipt Summary
+    tbody
+      tr
+        td Received:
+        td
+          | #{address.confirmedReceived}
+          if address.unconfirmedReceived > 0
+            |  (#{address.unconfirmedReceived} unconfirmed)
+          |  BTC
+      tr
+        td Possibly received:
+        td
+          | #{address.confirmedPossiblyReceived}
+          if address.unconfirmedPossiblyReceived > 0
+            |  (#{address.unconfirmedPossiblyReceived} unconfirmed)
+          |  BTC
+  table.table.table-striped.spaced
+    thead
+      tr
+        th(colspan=3) Transaction Receipt
+    tbody
+      if address.transactions.length == 0
         tr
-          th(colspan=2) Calculated Receipt Summary
-      tbody
-        tr
-          td Received:
+          td No corresponding transactions were found.
           td
-            | #{address.confirmedReceived}
-            if address.unconfirmedReceived > 0
-              |  (#{address.unconfirmedReceived} unconfirmed)
-            |  BTC
-        tr
-          td Possibly received:
           td
-            | #{address.confirmedPossiblyReceived}
-            if address.unconfirmedPossiblyReceived > 0
-              |  (#{address.unconfirmedPossiblyReceived} unconfirmed)
-            |  BTC
-    table.table.table-striped.spaced
-      thead
+      each tx, txid in address.transactions
         tr
-          th(colspan=3) Transaction Receipt
-      tbody
-        if address.transactions.length == 0
-          tr
-            td No corresponding transactions were found.
-            td
-            td
-        each tx, txid in address.transactions
-          tr
-            td: a(href='http://mychain.io/tx/'+txid) #{txid.toLowerCase()}
-            td Value paid to address:
-            td #{tx.amount} BTC
-          tr
-            td
-            td Blocks confirmed:
-            td #{tx.confirmations}
+          td: a(href='http://mychain.io/tx/'+txid) #{txid.toLowerCase()}
+          td Value paid to address:
+          td #{tx.amount} BTC
+        tr
+          td
+          td Blocks confirmed:
+          td #{tx.confirmations}

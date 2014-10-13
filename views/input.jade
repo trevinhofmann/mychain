@@ -1,39 +1,35 @@
 extends layout
 
 block content
-  .container.very-padded
-    h1.text-center
-      | My
-      span.holo Chain
-    form(role="search", action="http://mychain.io/search")
-      .form-group
-        input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q" value=tx.txid+'/input/'+input.n)
-    h3.text-center.fairly-spaced
-      | Input: 
-      a(href='http://mychain.io/tx/'+tx.txid+'/input/'+input.n) #{tx.txid}/input/#{input.n}
-    table.table.table-striped.spaced
-      thead
+  form(role="search", action="http://mychain.io/search")
+    .form-group
+      input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q" value=tx.txid+'/input/'+input.n)
+  h3.text-center.fairly-spaced
+    | Input: 
+    a(href='http://mychain.io/tx/'+tx.txid+'/input/'+input.n) #{tx.txid}/input/#{input.n}
+  table.table.table-striped.spaced
+    thead
+      tr
+        th(colspan=2) Raw Data
+    tbody
+      if !tx.isCoinbase
         tr
-          th(colspan=2) Raw Data
-      tbody
-        if !tx.isCoinbase
-          tr
-            td Redeemed txid:
-            td
-              a(href='http://mychain.io/tx/'+input.txid) #{input.txid}
-          tr
-            td Redeemed output index:
-            td #{input.vout}
-          tr
-            td ScriptSig:
-            td #{input.scriptSig.asm}
-          tr
-            td ScriptSig hex:
-            td #{input.scriptSig.hex}
-        else
-          tr
-            td Coinbase:
-            td #{input.coinbase}
+          td Redeemed txid:
+          td
+            a(href='http://mychain.io/tx/'+input.txid) #{input.txid}
         tr
-          td Sequence:
-          td #{input.sequence}
+          td Redeemed output index:
+          td #{input.vout}
+        tr
+          td ScriptSig:
+          td #{input.scriptSig.asm}
+        tr
+          td ScriptSig hex:
+          td #{input.scriptSig.hex}
+      else
+        tr
+          td Coinbase:
+          td #{input.coinbase}
+      tr
+        td Sequence:
+        td #{input.sequence}

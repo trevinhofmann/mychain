@@ -1,62 +1,58 @@
 extends layout
 
 block content
-  .container.very-padded
-    h1.text-center
-      | My
-      span.holo Chain
-    form(role="search", action="http://mychain.io/search")
-      .form-group
-        input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q" value=tx.txid+'/output/'+output.n)
-    h3.text-center.fairly-spaced
-      | Output: 
-      a(href='http://mychain.io/tx/'+tx.txid+'/output/'+output.n) #{tx.txid}/output/#{output.n}
-    table.table.table-striped.spaced
-      thead
-        tr
-          th(colspan=2) Raw Data
-      tbody
-        tr
-          td Output id:
-          td #{output.n}
-        tr
-          td Value:
-          td #{output.value} BTC
-        tr
-          td ScriptPubKey:
-          td #{output.scriptPubKey.asm}
-        tr
-          td ScriptPubKey hex:
-          td #{output.scriptPubKey.hex}
-    table.table.table-striped.spaced
-      thead
-        tr
-          th(colspan=2) Other Information
-      tbody
-        tr
-          td Created in transaction:
-          td: a(href='http://mychain.io/tx/'+tx.txid) #{tx.txid}
-        tr
-          td Redeemed for input:
-          if (redeemInputs.length > 0)
-            td
-              each input in redeemInputs
-                a(href='http://mychain.io/tx/'+input.txid+'/input/'+input.inputid) #{input.txid}/input/#{input.inputid}
-                br
-          else
-            td Not yet redeemed
-        tr
-          td ScriptPubKey type:
-          td #{output.scriptPubKey.type}
-    table.table.table-striped.spaced
-      thead
-        tr
-          th Outputs with Identical ScriptPubKey
-      tbody
-        if (relatedOutputs.length > 0)
-          each output in relatedOutputs
-            tr
-              td: a(href='http://mychain.io/tx/'+output.txid+'/output/'+output.vout) #{output.txid}/output/#{output.vout}
+  form(role="search", action="http://mychain.io/search")
+    .form-group
+      input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q" value=tx.txid+'/output/'+output.n)
+  h3.text-center.fairly-spaced
+    | Output: 
+    a(href='http://mychain.io/tx/'+tx.txid+'/output/'+output.n) #{tx.txid}/output/#{output.n}
+  table.table.table-striped.spaced
+    thead
+      tr
+        th(colspan=2) Raw Data
+    tbody
+      tr
+        td Output id:
+        td #{output.n}
+      tr
+        td Value:
+        td #{output.value} BTC
+      tr
+        td ScriptPubKey:
+        td #{output.scriptPubKey.asm}
+      tr
+        td ScriptPubKey hex:
+        td #{output.scriptPubKey.hex}
+  table.table.table-striped.spaced
+    thead
+      tr
+        th(colspan=2) Other Information
+    tbody
+      tr
+        td Created in transaction:
+        td: a(href='http://mychain.io/tx/'+tx.txid) #{tx.txid}
+      tr
+        td Redeemed for input:
+        if (redeemInputs.length > 0)
+          td
+            each input in redeemInputs
+              a(href='http://mychain.io/tx/'+input.txid+'/input/'+input.inputid) #{input.txid}/input/#{input.inputid}
+              br
         else
+          td Not yet redeemed
+      tr
+        td ScriptPubKey type:
+        td #{output.scriptPubKey.type}
+  table.table.table-striped.spaced
+    thead
+      tr
+        th Outputs with Identical ScriptPubKey
+    tbody
+      if (relatedOutputs.length > 0)
+        each output in relatedOutputs
           tr
-            td No outputs were found.
+            td: a(href='http://mychain.io/tx/'+output.txid+'/output/'+output.vout) #{output.txid}/output/#{output.vout}
+      else
+        tr
+          td No outputs were found.

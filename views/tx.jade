@@ -1,98 +1,94 @@
 extends layout
 
 block content
-  .container.very-padded
-    h1.text-center
-      | My
-      span.holo Chain
-    form(role="search", action="http://mychain.io/search")
-      .form-group
-        input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q" value=tx.txid)
-    h3.text-center.fairly-spaced
-      | Transaction: 
-      a(href='http://mychain.io/tx/'+tx.txid) #{tx.txid}
-    table.table.table-striped.spaced
-      thead
+  form(role="search", action="http://mychain.io/search")
+    .form-group
+      input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q" value=tx.txid)
+  h3.text-center.fairly-spaced
+    | Transaction: 
+    a(href='http://mychain.io/tx/'+tx.txid) #{tx.txid}
+  table.table.table-striped.spaced
+    thead
+      tr
+        th(colspan=2) Raw Data
+    tbody
+      tr
+        td Version:
+        td #{tx.version}
+      tr
+        td Input count:
+        td #{tx.vin.length}
+      tr
+        td Inputs:
+        td: a(href='#inputs') See below
+      tr
+        td Output count:
+        td #{tx.vout.length}
+      tr
+        td Outputs:
+        td: a(href='#outputs') See below
+      tr
+        td Lock time:
+        td #{tx.locktime}
+  table.table.table-striped.spaced
+    thead
+      tr
+        th(colspan=2) Other Information
+    tbody
+      tr
+        td Blocks confirmed:
+        td #{tx.confirmations}
+      tr
+        td Fee paid:
+        td #{tx.fee}
+      if tx.confirmations != 0
         tr
-          th(colspan=2) Raw Data
-      tbody
+          td Contained in block:
+          td: a(href='http://mychain.io/block/'+tx.blockhash) #{tx.blockhash}
         tr
-          td Version:
-          td #{tx.version}
-        tr
-          td Input count:
-          td #{tx.vin.length}
-        tr
-          td Inputs:
-          td: a(href='#inputs') See below
-        tr
-          td Output count:
-          td #{tx.vout.length}
-        tr
-          td Outputs:
-          td: a(href='#outputs') See below
-        tr
-          td Lock time:
-          td #{tx.locktime}
-    table.table.table-striped.spaced
-      thead
-        tr
-          th(colspan=2) Other Information
-      tbody
-        tr
-          td Blocks confirmed:
-          td #{tx.confirmations}
-        tr
-          td Fee paid:
-          td #{tx.fee}
-        if tx.confirmations != 0
+          td Time:
+          td #{tx.time}
+      tr
+        td Generation transaction:
+        if tx.isCoinbase
+          td True
+        else
+          td False
+  table.table.table-striped.spaced
+    thead
+      tr
+        th#inputs(colspan=3) Inputs
+    tbody
+      each input, i in tx.vin
+        if !tx.isCoinbase
           tr
-            td Contained in block:
-            td: a(href='http://mychain.io/block/'+tx.blockhash) #{tx.blockhash}
-          tr
-            td Time:
-            td #{tx.time}
-        tr
-          td Generation transaction:
-          if tx.isCoinbase
-            td True
-          else
-            td False
-    table.table.table-striped.spaced
-      thead
-        tr
-          th#inputs(colspan=3) Inputs
-      tbody
-        each input, i in tx.vin
-          if !tx.isCoinbase
-            tr
-              td: a(href='http://mychain.io/tx/'+tx.txid+'/input/'+i) #{i}
-              td Redeemed txid:
-              td: a(href='http://mychain.io/tx/'+input.txid) #{input.txid}
-            tr
-              td
-              td Redeemed output index:
-              td: a(href='http://mychain.io/tx/'+input.txid+'/output/'+input.vout) #{input.vout}
-            tr
-              td
-              td ScriptSig:
-              td #{input.scriptSig.asm}
-          else
-            tr
-              td: a(href='http://mychain.io/tx/'+tx.txid+'/input/'+i) #{i}
-              td Coinbase:
-              td #{input.coinbase}
-    table.table.table-striped.spaced
-      thead
-        tr
-          th#outputs(colspan=3) Outputs
-      tbody
-        each output in tx.vout
-          tr
-            td: a(href='http://mychain.io/tx/'+tx.txid+'/output/'+output.n) #{output.n}
-            td Value:
-            td #{output.value} BTC
+            td: a(href='http://mychain.io/tx/'+tx.txid+'/input/'+i) #{i}
+            td Redeemed txid:
+            td: a(href='http://mychain.io/tx/'+input.txid) #{input.txid}
           tr
             td
-            td ScriptPubKey:
-            td #{output.scriptPubKey.asm}
+            td Redeemed output index:
+            td: a(href='http://mychain.io/tx/'+input.txid+'/output/'+input.vout) #{input.vout}
+          tr
+            td
+            td ScriptSig:
+            td #{input.scriptSig.asm}
+        else
+          tr
+            td: a(href='http://mychain.io/tx/'+tx.txid+'/input/'+i) #{i}
+            td Coinbase:
+            td #{input.coinbase}
+  table.table.table-striped.spaced
+    thead
+      tr
+        th#outputs(colspan=3) Outputs
+    tbody
+      each output in tx.vout
+        tr
+          td: a(href='http://mychain.io/tx/'+tx.txid+'/output/'+output.n) #{output.n}
+          td Value:
+          td #{output.value} BTC
+        tr
+          td
+          td ScriptPubKey:
+          td #{output.scriptPubKey.asm}
