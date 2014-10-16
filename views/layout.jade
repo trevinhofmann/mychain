@@ -19,8 +19,9 @@ body
       ga('send', 'pageview');
   
   .container.very-padded
-    h1.text-center
-      img(src='http://mychain.io/img/logo.png')
+    .text-center
+      a(href='http://mychain.io/')
+        img(src='http://mychain.io/img/logo.png', alt='MyChain')
     block content
   div.footer
     a(href='http://mychain.io/about') About
