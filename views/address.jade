@@ -13,14 +13,14 @@ block content
         th(colspan=2) Calculated Receipt Summary
     tbody
       tr
-        td Received:
+        td(title='The largest amount of BTC received in a single transaction') Received:
         td
           | #{address.confirmedReceived}
           if address.unconfirmedReceived > 0
             |  (#{address.unconfirmedReceived} unconfirmed)
           |  BTC
       tr
-        td Possibly received:
+        td(title='The amount received in extra transactions (try to avoid reusing addresses)') Possibly received:
         td
           | #{address.confirmedPossiblyReceived}
           if address.unconfirmedPossiblyReceived > 0
@@ -39,9 +39,9 @@ block content
       each tx, txid in address.transactions
         tr
           td: a(href='http://mychain.io/tx/'+txid) #{txid.toLowerCase()}
-          td Value paid to address:
+          td(title='BTC received in this specific transaction') Value paid to address:
           td #{tx.amount} BTC
         tr
           td
-          td Blocks confirmed:
+          td(title='The number confirmations for this transaction') Blocks confirmed:
           td #{tx.confirmations}
