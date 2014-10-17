@@ -13,38 +13,38 @@ block content
         th(colspan=2) Block Header
     tbody
       tr
-        td Version:
+        td(title='Block version number') Version:
         td #{block.version}
       tr
-        td Previous block hash:
+        td(title='256-bit hash of the previous block header') Previous block hash:
         td: a(href='http://mychain.io/block/'+block.previousblockhash) #{block.previousblockhash}
       tr
-        td Merkle root hash:
+        td(title='256-bit hash based on the transactions in this block') Merkle root hash:
         td #{block.merkleroot}
       tr
-        td Time:
+        td(title='Unix timestamp when the block was generated') Time:
         td #{block.time}
       tr
-        td Bits:
+        td(title='A compact form of the mining difficulty') Bits:
         td #{block.bits}
       tr
-        td Nonce:
+        td(title='A 32-bit number tried when mining') Nonce:
         td #{block.nonce}
   table.table.table-striped.spaced
     tr
       th(colspan=2) More Information
     tr
-      td Difficulty:
+      td(title='A measure of how challenging this block was to find') Difficulty:
       td #{block.difficulty}
     tr
-      td Height:
+      td(title='The number of blocks below this one in the chain') Height:
       td #{block.height}
     if block.nextblockhash
       tr
-        td Next block:
+        td(title='A valid block claiming this one as the previous block') Next block:
         td: a(href='http://mychain.io/block/'+block.nextblockhash) #{block.nextblockhash}
     tr
-      td Number of transactions:
+      td(title='The number of transactions contained in this block') Number of transactions:
       td #{block.tx.length}
   table.table.table-striped.spaced
     tr
