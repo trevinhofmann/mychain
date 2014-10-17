@@ -13,16 +13,16 @@ block content
         th(colspan=2) Raw Data
     tbody
       tr
-        td Output id:
+        td(title='The id of the output within its transaction') Output id:
         td #{output.n}
       tr
-        td Value:
+        td(title='The number of bitcoins sent') Value:
         td #{output.value} BTC
       tr
-        td ScriptPubKey:
+        td(title='The script to be satisfied when claiming this output') ScriptPubKey:
         td #{output.scriptPubKey.asm}
       tr
-        td ScriptPubKey hex:
+        td(title='A hexadecimal representation of the ScriptPubKey') ScriptPubKey hex:
         td #{output.scriptPubKey.hex}
   table.table.table-striped.spaced
     thead
@@ -30,10 +30,10 @@ block content
         th(colspan=2) Other Information
     tbody
       tr
-        td Created in transaction:
+        td(title='The id of the transaction containing this output') Created in transaction:
         td: a(href='http://mychain.io/tx/'+tx.txid) #{tx.txid}
       tr
-        td Redeemed for input:
+        td(title='An input that redeems this output') Redeemed for input:
         if (redeemInputs.length > 0)
           td
             each input in redeemInputs
@@ -42,7 +42,7 @@ block content
         else
           td Not yet redeemed
       tr
-        td ScriptPubKey type:
+        td(title='The type of script used for redeeming this output') ScriptPubKey type:
         td #{output.scriptPubKey.type}
   table.table.table-striped.spaced
     thead
