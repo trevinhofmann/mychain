@@ -14,6 +14,7 @@ module.exports = function(app){
   var api = require('./controllers/api');
   var about = require('./controllers/about');
   var donate = require('./controllers/donate');
+  var notfound = require('./controllers/notfound');
 
   app.get('/', index.render);
   app.get('/search', search.render);
@@ -26,5 +27,6 @@ module.exports = function(app){
   app.get('/api/:command', api.render);
   app.get('/about', about.render);
   app.get('/donate', donate.render);
+  app.get('*', notfound.render);
   
 };

@@ -25,9 +25,6 @@ module.exports = function(){
   // Log page requests to the console.
   app.use(logger.log);
 
-  // Use the routes.js script to point requests to the appropriate rendering script.
-  require('./routes')(app, database);
-
   // Use Stylus as the CSS middleware.
   app.use(stylus.middleware({
     src: __dirname + '/public',
@@ -38,6 +35,9 @@ module.exports = function(){
 
   // Render static files from the 'public' directory.
   app.use(express.static(__dirname + '/public'));
+
+  // Use the routes.js script to point requests to the appropriate rendering script.
+  require('./routes')(app, database);
 
   // Return the app
   return app;

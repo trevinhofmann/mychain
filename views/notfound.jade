@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  form(role="search", action="http://mychain.io/search")
+    .form-group
+      input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q", autofocus)
+  .alert.alert-danger
+    h3 Looks like someone's a little lost
+    p Error 404: Not Found
+    p 
+      | Try the search bar above, or 
+      a(href='mailto:trevinhofmann@gmail.com') send me an email
+      |  if you need help finding your way.
