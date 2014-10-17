@@ -14,22 +14,22 @@ block content
     tbody
       if !tx.isCoinbase
         tr
-          td Redeemed txid:
+          td(title='The transaction id being claimed by this input') Redeemed txid:
           td
             a(href='http://mychain.io/tx/'+input.txid) #{input.txid}
         tr
-          td Redeemed output index:
+          td(title='The index of the output being claimed') Redeemed output index:
           td #{input.vout}
         tr
-          td ScriptSig:
+          td(title='The signature script') ScriptSig:
           td #{input.scriptSig.asm}
         tr
-          td ScriptSig hex:
+          td(title='A hexadecimal representation of the ScriptSig') ScriptSig hex:
           td #{input.scriptSig.hex}
       else
         tr
-          td Coinbase:
+          td(title='The contents of a generation transaction input') Coinbase:
           td #{input.coinbase}
       tr
-        td Sequence:
+        td(title='Irrelevant unless using lock_time') Sequence:
         td #{input.sequence}
