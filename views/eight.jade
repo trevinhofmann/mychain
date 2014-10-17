@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  form(role="search", action="http://mychain.io/search")
+    .form-group
+      input.form-control.spaced(type="text", placeholder="Search for an address, transaction, or block", name="q", autofocus)
+  .text-center
+    #eight-display-container
+      .eight-display 8
+      .eight-display 8
+      .eight-display 8
+      .eight-display 8
+      .eight-display 8
+    br
+    #eight-button 8
+    script(src='http://mychain.io/lib/mychain/eight.js')

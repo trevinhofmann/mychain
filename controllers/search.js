@@ -52,7 +52,7 @@ function searchInput(q, res){
   searchOutput(q, res);
 }
 
-// If search query is an output, redirects to the output page. Otherwise, it renders an error for no search results.
+// If search query is an output, redirects to the output page. Otherwise, it calls the next search function.
 function searchOutput(q, res){
   if (isOutputFormat(q)){
     rpc.getRawTransaction(q.split('/output/')[0], 1, function(err, ret){
@@ -62,6 +62,15 @@ function searchOutput(q, res){
       }
       res.render('index', {error: 'Output not found: '+q});
     });
+    return;
+  }
+  searchEight(q, res);
+}
+
+// If search query is 8, let them play the 8 game. Otherwise, it renders an error for no search results.
+function searchEight(q, res){
+  if (q == '8'){
+    res.render('eight');
     return;
   }
   res.render('index', {error: 'Search returned no results: '+q});
