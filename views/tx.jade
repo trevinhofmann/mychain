@@ -13,22 +13,22 @@ block content
         th(colspan=2) Raw Data
     tbody
       tr
-        td Version:
+        td(title='Transaction version number') Version:
         td #{tx.version}
       tr
-        td Input count:
+        td(title='Number of inputs') Input count:
         td #{tx.vin.length}
       tr
-        td Inputs:
+        td(title='A list of the inputs') Inputs:
         td: a(href='#inputs') See below
       tr
-        td Output count:
+        td(title='Number of outputs') Output count:
         td #{tx.vout.length}
       tr
-        td Outputs:
+        td(title='A list of the outputs') Outputs:
         td: a(href='#outputs') See below
       tr
-        td Lock time:
+        td(title='If not zero, the block height or timestamp when this transaction is finalized') Lock time:
         td #{tx.locktime}
   table.table.table-striped.spaced
     thead
@@ -36,20 +36,20 @@ block content
         th(colspan=2) Other Information
     tbody
       tr
-        td Blocks confirmed:
+        td(title='The number of confirmations for this transaction') Blocks confirmed:
         td #{tx.confirmations}
       tr
-        td Fee paid:
+        td(title='The number of bitcoins paid to miners for processing') Fee paid:
         td #{tx.fee}
       if tx.confirmations != 0
         tr
-          td Contained in block:
+          td('A block containing this transaction') Contained in block:
           td: a(href='http://mychain.io/block/'+tx.blockhash) #{tx.blockhash}
         tr
-          td Time:
+          td(title='Unix timestamp of the containing block') Time:
           td #{tx.time}
       tr
-        td Generation transaction:
+        td(title='True if this is a generation transaction for the miner reward') Generation transaction:
         if tx.isCoinbase
           td True
         else
@@ -63,20 +63,20 @@ block content
         if !tx.isCoinbase
           tr
             td: a(href='http://mychain.io/tx/'+tx.txid+'/input/'+i) #{i}
-            td Redeemed txid:
+            td(title='The id of a transaction redeeming this input') Redeemed txid:
             td: a(href='http://mychain.io/tx/'+input.txid) #{input.txid}
           tr
             td
-            td Redeemed output index:
+            td(title='The index of the output being redeemed') Redeemed output index:
             td: a(href='http://mychain.io/tx/'+input.txid+'/output/'+input.vout) #{input.vout}
           tr
             td
-            td ScriptSig:
+            td(title='The signature script') ScriptSig:
             td #{input.scriptSig.asm}
         else
           tr
             td: a(href='http://mychain.io/tx/'+tx.txid+'/input/'+i) #{i}
-            td Coinbase:
+            td(title='The contents of a generation transaction input') Coinbase:
             td #{input.coinbase}
   table.table.table-striped.spaced
     thead
@@ -86,9 +86,9 @@ block content
       each output in tx.vout
         tr
           td: a(href='http://mychain.io/tx/'+tx.txid+'/output/'+output.n) #{output.n}
-          td Value:
+          td(title='The number of bitcoins sent') Value:
           td #{output.value} BTC
         tr
           td
-          td ScriptPubKey:
+          td(title='The script to be satisfied when redeeming this output') ScriptPubKey:
           td #{output.scriptPubKey.asm}
