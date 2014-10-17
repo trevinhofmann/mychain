@@ -43,7 +43,7 @@ block content
         td #{tx.fee}
       if tx.confirmations != 0
         tr
-          td('A block containing this transaction') Contained in block:
+          td(title='A block containing this transaction') Contained in block:
           td: a(href='http://mychain.io/block/'+tx.blockhash) #{tx.blockhash}
         tr
           td(title='Unix timestamp of the containing block') Time:
