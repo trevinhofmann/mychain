@@ -2,7 +2,7 @@
 
 // Process a search query, redirecting to the appropriate page.
 exports.render = function (req, res) {
-  var q = req.query.q;
+  var q = req.query.q.trim();
   searchAddress(q, res);
 };
 
