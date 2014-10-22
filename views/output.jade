@@ -33,15 +33,6 @@ block content
         td(title='The id of the transaction containing this output') Created in transaction:
         td: a(href='http://mychain.io/tx/'+tx.txid) #{tx.txid}
       tr
-        td(title='An input that redeems this output') Redeemed for input:
-        if (redeemInputs.length > 0)
-          td
-            each input in redeemInputs
-              a(href='http://mychain.io/tx/'+input.txid+'/input/'+input.inputid) #{input.txid}/input/#{input.inputid}
-              br
-        else
-          td Not yet redeemed
-      tr
         td(title='The type of script used for redeeming this output') ScriptPubKey type:
         td #{output.scriptPubKey.type}
   table.table.table-striped.spaced
