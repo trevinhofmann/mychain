@@ -35,15 +35,3 @@ block content
       tr
         td(title='The type of script used for redeeming this output') ScriptPubKey type:
         td #{output.scriptPubKey.type}
-  table.table.table-striped.spaced
-    thead
-      tr
-        th Outputs with Identical ScriptPubKey
-    tbody
-      if (relatedOutputs.length > 0)
-        each output in relatedOutputs
-          tr
-            td: a(href='http://mychain.io/tx/'+output.txid+'/output/'+output.vout) #{output.txid}/output/#{output.vout}
-      else
-        tr
-          td No outputs were found.
