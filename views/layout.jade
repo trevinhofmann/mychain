@@ -25,6 +25,12 @@ body
         img(src='http://mychain.io/img/logo.png', alt='MyChain')
     block content
   div.footer
+    | Server Status: 
+    if database.getHeightChecked() != database.getChainHeight()
+      span.text-warning: strong Syncing (Block Height #{database.getHeightChecked()})
+    else
+      span.text-success: strong Online
+    br
     a(href='http://mychain.io/about', title='Want to learn more?') About
     |  • 
     a(href='https://github.com/thofmann/mychain', title='This whole thing is open source.') Source Code
