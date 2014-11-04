@@ -1,26 +1,26 @@
 {
-  "name" : "mychain",
-  "version" : "0.0.1",
-  "description" : "A Bitcoin block chain explorer",
-  "homepage" : "https://github.com/thofmann/mychain",
-  "repository" : {
-	"type" : "git",
-	"url" : "https://github.com/thofmann/mychain.git"
+  "name": "mychain",
+  "version": "0.0.1",
+  "description": "A Bitcoin block chain explorer",
+  "homepage": "https://github.com/thofmann/mychain",
+  "repository": {
+	"type": "git",
+	"url": "https://github.com/thofmann/mychain.git"
   },
-  "bugs" : {
-    "url" : "https://github.com/thofmann/mychain/issues",
-    "email" : "trevinhofmann@gmail.com"
+  "bugs": {
+    "url": "https://github.com/thofmann/mychain/issues",
+    "email": "trevinhofmann@gmail.com"
   },
-  "author" : {
-    "name" : "Trevin Hofmann",
-    "email" : "trevinhofmann@gmail.com"
+  "author": {
+    "name": "Trevin Hofmann",
+    "email": "trevinhofmann@gmail.com"
   },
-  "dependencies" : {
-    "express" : "*",
-    "jade" : "*",
-    "stylus" : "*",
-    "bitcore" : "*",
-    "mysql" : "*"
+  "dependencies": {
+    "express": "*",
+    "jade": "*",
+    "stylus": "*",
+    "bitcore": "*",
+    "mysql": "*"
   },
-  "main" : "app.js"
+  "main": "app.js"
 }
