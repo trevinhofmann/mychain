@@ -18,14 +18,13 @@ function renderResult(req, res){
   var params = req.query;
   if (command == 'blockhash'){
     renderBlock(req, res)
-  }
-  else if (command == 'tx'){
+  } else if (command == 'tx'){
     renderTransaction(req, res);
-  }
-  else if (command == 'address'){
+  } else if (command == 'address'){
     renderAddress(req, res);
-  }
-  else{
+  } else if (command == 'pushtx'){
+    pushTransaction(req, res);
+  } else{
     renderError(req, res, 'Command \''+command+'\' was not recognized.');
   }
 }
@@ -86,6 +85,21 @@ function renderAddress(req, res){
     var response = {};
     response.status = 'ok';
     response.data = address;
+    return res.json(response);
+  });
+}
+
+// Push a raw transaction to the network
+function pushTransaction(req, res){
+  var params = req.query;
+  var tx = params.rawtx;
+  if (typeof params.rawtx == 'undefined'){
+    renderError(req, res, 'Required parameter \'rawtx\' is missing.');
+    return;
+  }
+  rpc.sendRawTransaction(tx, function(err, ret){
+    var response = {};
+    response.status = 'ok';
     return res.json(response);
   });
 }
